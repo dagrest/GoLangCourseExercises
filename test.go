@@ -122,40 +122,44 @@ func main() {
 
 	//getSystemData()
 
-	// ====================================
-	// Go routines
-	fmt.Println("Go routines - Stated")
-	fmt.Println("Begin CPUs: ", runtime.NumCPU())
-	fmt.Println("Begin Go routines: ", runtime.NumGoroutine())
+	/*
+		// ====================================
+		// =========== Level9Ex1 ==============
+		// Go routines
+		fmt.Println("Go routines - Stated")
+		fmt.Println("Begin CPUs: ", runtime.NumCPU())
+		fmt.Println("Begin Go routines: ", runtime.NumGoroutine())
 
-	var waitGroup sync.WaitGroup
-	waitGroup.Add(2)
+		var waitGroup sync.WaitGroup
+		waitGroup.Add(2)
 
-	//go action1(waitGroup)
-	go func() {
-		fmt.Println("Action - 1")
-		waitGroup.Done()
-	}()
-	//go action2(waitGroup)
-	go func() {
-		fmt.Println("Action - 1")
-		waitGroup.Done()
-	}()
+		//go action1(waitGroup) - not working ??? - DEAD LOCK - WHY???
+		go func() {
+			fmt.Println("Action - 1")
+			waitGroup.Done()
+		}()
+		//go action2(waitGroup) - not working ??? - DEAD LOCK - WHY???
+		go func() {
+			fmt.Println("Action - 1")
+			waitGroup.Done()
+		}()
 
-	fmt.Println("Mid CPUs: ", runtime.NumCPU())
-	fmt.Println("Mid Go routines: ", runtime.NumGoroutine())
+		fmt.Println("Mid CPUs: ", runtime.NumCPU())
+		fmt.Println("Mid Go routines: ", runtime.NumGoroutine())
 
-	waitGroup.Wait()
+		waitGroup.Wait()
 
-	fmt.Println("End CPUs: ", runtime.NumCPU())
-	fmt.Println("End Go routines: ", runtime.NumGoroutine())
-	fmt.Println("Go routines - Finished")
+		fmt.Println("End CPUs: ", runtime.NumCPU())
+		fmt.Println("End Go routines: ", runtime.NumGoroutine())
+		fmt.Println("Go routines - Finished")
 
-	// Go routines
-	// ====================================
+		// Go routines
+		// =========== Level9Ex1 ==============
+		// ====================================
+	*/
 
-	//Level9Ex1()
-	//Level9Ex2()
+	//Level9Ex1() - ??? WHY the exercise is not working if not implemented in main - ???
+	Level9Ex2()
 	//Level9Ex3()
 	//Level9Ex4()
 	//Level9Ex5()
@@ -174,7 +178,27 @@ func Level9Ex4() {
 func Level9Ex3() {
 }
 
+type person92 struct {
+	name string
+}
+
+type human92 interface {
+	Speak()
+}
+
+func SaySomething(h human92) {
+	fmt.Println("Person - SaySomething implementation from person: ", p)
+	h.Speak()
+}
+
+func (t *person92) Speak() {
+	fmt.Println("Person - Speak implementation from person")
+}
+
 func Level9Ex2() {
+	p := person92{name: "James Bond"}
+
+	SaySomething(&p)
 }
 
 func action1(waitGroup sync.WaitGroup) {
