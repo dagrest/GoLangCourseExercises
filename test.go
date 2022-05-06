@@ -122,6 +122,7 @@ func main() {
 
 	//getSystemData()
 
+	//Level9Ex1() - ??? WHY the exercise is not working if not implemented in main - ???
 	/*
 		// ====================================
 		// =========== Level9Ex1 ==============
@@ -158,9 +159,39 @@ func main() {
 		// ====================================
 	*/
 
-	//Level9Ex1() - ??? WHY the exercise is not working if not implemented in main - ???
-	Level9Ex2()
+	//Level9Ex2()
+
 	//Level9Ex3()
+	// ====================================
+	// =========== Level9Ex3 ==============
+	// Go routines
+
+	count := 0
+	fmt.Println("CPUs:", runtime.NumCPU())
+	fmt.Println("Goroutines:", runtime.NumGoroutine())
+
+	var wg sync.WaitGroup
+
+	wg.Add(100)
+	for i := 0; i < 100; i++ {
+		fmt.Printf("%d count: %d\n", i, count)
+		go func() {
+			count++
+			fmt.Printf("count: %d\n", count)
+			wg.Done()
+		}()
+	}
+	fmt.Println("Goroutines:", runtime.NumGoroutine())
+	wg.Wait()
+
+	fmt.Println("CPUs:", runtime.NumCPU())
+	fmt.Println("Goroutines:", runtime.NumGoroutine())
+	fmt.Println("Count: ", count)
+
+	// Go routines
+	// =========== Level9Ex3 ==============
+	// ====================================
+
 	//Level9Ex4()
 	//Level9Ex5()
 	//Level9Ex6()
@@ -187,7 +218,7 @@ type human92 interface {
 }
 
 func SaySomething(h human92) {
-	fmt.Println("Person - SaySomething implementation from person: ", p)
+	fmt.Println("Person - SaySomething implementation from person: ")
 	h.Speak()
 }
 
