@@ -51,6 +51,7 @@ import (
 	"runtime"
 	"sort"
 	"sync"
+	"sync/atomic"
 
 	"golang.org/x/crypto/bcrypt"
 )
@@ -174,24 +175,26 @@ func main() {
 	// Found 1 data race(s)
 	// exit status 66
 
-	count := 0
+	var count int64 = 0
 	fmt.Println("CPUs:", runtime.NumCPU())
 	fmt.Println("Goroutines:", runtime.NumGoroutine())
 
 	var wg sync.WaitGroup
 	type Mutex struct {
 	}
-	var m sync.Mutex
+	//var m sync.Mutex
 
 	wg.Add(100)
 	for i := 0; i < 100; i++ {
 		go func() {
 			//runtime.Gosched() // https://pkg.go.dev/runtime#Gosched
 
-			m.Lock()
-			count++
-			m.Unlock()
-			fmt.Printf("count: %d\n", count)
+			atomic.AddInt64(&count, 1)
+			fmt.Printf("count: %d\n", atomic.LoadInt64(&count))
+			//m.Lock()
+			//count++
+			//m.Unlock()
+			//fmt.Printf("count: %d\n", count)
 			wg.Done()
 		}()
 	}
