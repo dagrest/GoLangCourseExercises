@@ -8,12 +8,49 @@ package main
 // run the following to update bcrypt:
 // go get -u golang.org/x/crypto/bcrypt
 
+/*
+	Concurrency
+	===========
+	https://go.dev/doc/effective_go#concurrency
+
+	Goroutines
+	They're called goroutines because the existing terms—threads, coroutines, processes, and so on—convey inaccurate connotations.
+	A goroutine has a simple model: it is a function executing concurrently with other goroutines in the same address space.
+	It is lightweight, costing little more than the allocation of stack space. And the stacks start small, so they are cheap,
+	and grow by allocating (and freeing) heap storage as required.
+
+	Goroutines are multiplexed onto multiple OS threads so if one should block, such as while waiting for I/O, others continue
+	to run. Their design hides many of the complexities of thread creation and management.
+
+	Prefix a function or method call with the go keyword to run the call in a new goroutine. When the call completes, the
+	goroutine exits, silently. (The effect is similar to the Unix shell's & notation for running a command in the background.)
+
+
+	Go statements
+	=============
+	https://go.dev/ref/spec
+
+	A "go" statement starts the execution of a function call as an independent concurrent thread of control, or goroutine,
+	within the same address space.
+
+	GoStmt = "go" Expression .
+	he expression must be a function or method call; it cannot be parenthesized. Calls of built-in functions are restricted
+	as for expression statements.
+
+	The function value and parameters are evaluated as usual in the calling goroutine, but unlike with a regular call,
+	program execution does not wait for the invoked function to complete. Instead, the function begins executing independently
+	in a new goroutine. When the function terminates, its goroutine also terminates. If the function has any return values,
+	they are discarded when the function completes.  <----- !!!!!
+*/
+
 import (
 	"encoding/json"
 	"fmt"
 	"math"
 	"os"
+	"runtime"
 	"sort"
+	"sync"
 
 	"golang.org/x/crypto/bcrypt"
 )
@@ -83,12 +120,46 @@ func main() {
 	//Level8Ex4()
 	//Level8Ex5()
 
-	Level9Ex1()
-	Level9Ex2()
-	Level9Ex3()
-	Level9Ex4()
-	Level9Ex5()
-	Level9Ex6()
+	//getSystemData()
+
+	// ====================================
+	// Go routines
+	fmt.Println("Go routines - Stated")
+	fmt.Println("Begin CPUs: ", runtime.NumCPU())
+	fmt.Println("Begin Go routines: ", runtime.NumGoroutine())
+
+	var waitGroup sync.WaitGroup
+	waitGroup.Add(2)
+
+	//go action1(waitGroup)
+	go func() {
+		fmt.Println("Action - 1")
+		waitGroup.Done()
+	}()
+	//go action2(waitGroup)
+	go func() {
+		fmt.Println("Action - 1")
+		waitGroup.Done()
+	}()
+
+	fmt.Println("Mid CPUs: ", runtime.NumCPU())
+	fmt.Println("Mid Go routines: ", runtime.NumGoroutine())
+
+	waitGroup.Wait()
+
+	fmt.Println("End CPUs: ", runtime.NumCPU())
+	fmt.Println("End Go routines: ", runtime.NumGoroutine())
+	fmt.Println("Go routines - Finished")
+
+	// Go routines
+	// ====================================
+
+	//Level9Ex1()
+	//Level9Ex2()
+	//Level9Ex3()
+	//Level9Ex4()
+	//Level9Ex5()
+	//Level9Ex6()
 }
 
 func Level9Ex6() {
@@ -106,7 +177,35 @@ func Level9Ex3() {
 func Level9Ex2() {
 }
 
+func action1(waitGroup sync.WaitGroup) {
+	fmt.Println("Action - 1")
+	waitGroup.Done()
+}
+
+func action2(waitGroup sync.WaitGroup) {
+	fmt.Println("Action - 2")
+	waitGroup.Done()
+}
+
 func Level9Ex1() {
+	fmt.Println("Level 9 Ex 1")
+
+	var waitGroup sync.WaitGroup
+	waitGroup.Add(2)
+
+	go action1(waitGroup)
+	go action2(waitGroup)
+
+	waitGroup.Wait()
+
+	fmt.Println("Level 9 Ex 1 - Finished")
+}
+
+func getSystemData() {
+	fmt.Println("OS\t\t", runtime.GOOS)
+	fmt.Println("ARCH\t\t", runtime.GOARCH)
+	fmt.Println("CPUs\t\t", runtime.NumCPU())
+	fmt.Println("Goroutines\t", runtime.NumGoroutine())
 }
 
 type user85 struct {
