@@ -165,18 +165,32 @@ func main() {
 	// ====================================
 	// =========== Level9Ex3 ==============
 	// Go routines
+	// run as (to see race condition):
+	// 			go run -race test.go
+	// OUTPUT:
+	// CPUs: 10
+	// Goroutines: 1
+	// Count:  99
+	// Found 1 data race(s)
+	// exit status 66
 
 	count := 0
 	fmt.Println("CPUs:", runtime.NumCPU())
 	fmt.Println("Goroutines:", runtime.NumGoroutine())
 
 	var wg sync.WaitGroup
+	type Mutex struct {
+	}
+	var m sync.Mutex
 
 	wg.Add(100)
 	for i := 0; i < 100; i++ {
-		fmt.Printf("%d count: %d\n", i, count)
 		go func() {
+			//runtime.Gosched() // https://pkg.go.dev/runtime#Gosched
+
+			m.Lock()
 			count++
+			m.Unlock()
 			fmt.Printf("count: %d\n", count)
 			wg.Done()
 		}()
