@@ -227,44 +227,109 @@ func main() {
 		// ====================================
 	*/
 
-	/*
-		// ====================================
-		// Channels
-		// Level10Ex1
+	//Level10Ex1()
+	//Level10Ex2()
+	//Level10Ex3()
+	Level10Ex4()
+}
 
-		// solution 1:
-		//c := make(chan int)
+func gen10Ex4(q chan<- int) <-chan int {
+	c := make(chan int)
 
-		//go func() {
-		//	c <- 42
-		//}()
+	go func() {
+		for i := 0; i < 10; i++ {
+			c <- i
+		}
+		q <- 1
+		close(c)
+	}()
 
-		// solution 2:
-		c := make(chan int, 1)
-		c <- 42
+	return c
+}
 
-		fmt.Println(<-c)
+func receive10Ex4(c <-chan int, q <-chan int) {
+	for {
+		select {
+		case v := <-c:
+			fmt.Println(v)
+		case <-q:
+			return
+		}
+	}
+}
 
-		// Level10Ex1
-		// ====================================
-	*/
+func Level10Ex4() {
+	q := make(chan int)
+	c := gen10Ex4(q)
 
-	/*
-		// ====================================
-		// Channels
-		// Level10Ex2
-		cs := make(chan int)
+	receive10Ex4(c, q)
 
-		go func() {
-			cs <- 42
-		}()
-		fmt.Println(<-cs)
+	fmt.Println("about to exit")
+}
 
-		fmt.Printf("------\n")
-		fmt.Printf("cs\t%T\n", cs)
-		// Level10Ex2
-		// ====================================
-	*/
+func gen10Ex3() <-chan int {
+	c := make(chan int)
+
+	go func() {
+		for i := 0; i < 10; i++ {
+			c <- i
+		}
+		close(c)
+	}()
+
+	return c
+}
+
+func receive10Ex3(c <-chan int) {
+	for v := range c {
+		fmt.Println(v)
+	}
+}
+
+func Level10Ex3() {
+	c := gen10Ex3()
+	receive10Ex3(c)
+
+	fmt.Println("about to exit")
+}
+
+func Level10Ex2() {
+	// ====================================
+	// Channels
+	// Level10Ex2
+	cs := make(chan int)
+
+	go func() {
+		cs <- 42
+	}()
+	fmt.Println(<-cs)
+
+	fmt.Printf("------\n")
+	fmt.Printf("cs\t%T\n", cs)
+	// Level10Ex2
+	// ====================================
+}
+
+func Level10Ex1() {
+	// ====================================
+	// Channels
+	// Level10Ex1
+
+	// solution 1:
+	//c := make(chan int)
+
+	//go func() {
+	//	c <- 42
+	//}()
+
+	// solution 2:
+	c := make(chan int, 1)
+	c <- 42
+
+	fmt.Println(<-c)
+
+	// Level10Ex1
+	// ====================================
 }
 
 type person92 struct {
