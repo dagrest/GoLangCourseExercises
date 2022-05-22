@@ -26,6 +26,17 @@ package main
 	goroutine exits, silently. (The effect is similar to the Unix shell's & notation for running a command in the background.)
 
 
+	USEFUL LINKS
+	=============
+	https://talks.golang.org/
+	https://talks.golang.org/2012/concurrency.slide#25
+
+	https://go.dev/blog/pipelines
+
+	Go Concurrency Patterns: Context
+	https://go.dev/blog/context
+
+
 	Go statements
 	=============
 	https://go.dev/ref/spec
@@ -51,7 +62,6 @@ import (
 	"runtime"
 	"sort"
 	"sync"
-	"sync/atomic"
 
 	"golang.org/x/crypto/bcrypt"
 )
@@ -162,68 +172,99 @@ func main() {
 
 	//Level9Ex2()
 
-	//Level9Ex3()
-	// ====================================
-	// =========== Level9Ex3 ==============
-	// Go routines
-	// run as (to see race condition):
-	// 			go run -race test.go
-	// OUTPUT:
-	// CPUs: 10
-	// Goroutines: 1
-	// Count:  99
-	// Found 1 data race(s)
-	// exit status 66
+	/*
+		//Level9Ex5()
+		//Level9Ex4()
+		//Level9Ex3()
+		// ====================================
+		// =========== Level9Ex5 ==============
+		// =========== Level9Ex4 ==============
+		// =========== Level9Ex3 ==============
+		// Go routines
+		// run as (to see race condition):
+		// 			go run -race test.go
+		// OUTPUT:
+		// CPUs: 10
+		// Goroutines: 1
+		// Count:  99
+		// Found 1 data race(s)
+		// exit status 66
 
-	var count int64 = 0
-	fmt.Println("CPUs:", runtime.NumCPU())
-	fmt.Println("Goroutines:", runtime.NumGoroutine())
+		var count int64 = 0
+		fmt.Println("CPUs:", runtime.NumCPU())
+		fmt.Println("Goroutines:", runtime.NumGoroutine())
 
-	var wg sync.WaitGroup
-	type Mutex struct {
-	}
-	//var m sync.Mutex
+		var wg sync.WaitGroup
+		type Mutex struct {
+		}
+		//var m sync.Mutex
 
-	wg.Add(100)
-	for i := 0; i < 100; i++ {
+		wg.Add(100)
+		for i := 0; i < 100; i++ {
+			go func() {
+				//runtime.Gosched() // https://pkg.go.dev/runtime#Gosched
+
+				atomic.AddInt64(&count, 1)
+				fmt.Printf("count: %d\n", atomic.LoadInt64(&c))
+				//m.Lock()
+				//count++
+				//m.Unlock()
+				//fmt.Printf("count: %d\n", count)
+				wg.Done()
+			}()
+		}
+		fmt.Println("Goroutines:", runtime.NumGoroutine())
+		wg.Wait()
+
+		fmt.Println("CPUs:", runtime.NumCPU())
+		fmt.Println("Goroutines:", runtime.NumGoroutine())
+		fmt.Println("Count: ", count)
+
+		// Go routines
+		// =========== Level9Ex3 ==============
+		// =========== Level9Ex4 ==============
+		// =========== Level9Ex5 ==============
+		// ====================================
+	*/
+
+	/*
+		// ====================================
+		// Channels
+		// Level10Ex1
+
+		// solution 1:
+		//c := make(chan int)
+
+		//go func() {
+		//	c <- 42
+		//}()
+
+		// solution 2:
+		c := make(chan int, 1)
+		c <- 42
+
+		fmt.Println(<-c)
+
+		// Level10Ex1
+		// ====================================
+	*/
+
+	/*
+		// ====================================
+		// Channels
+		// Level10Ex2
+		cs := make(chan int)
+
 		go func() {
-			//runtime.Gosched() // https://pkg.go.dev/runtime#Gosched
-
-			atomic.AddInt64(&count, 1)
-			fmt.Printf("count: %d\n", atomic.LoadInt64(&count))
-			//m.Lock()
-			//count++
-			//m.Unlock()
-			//fmt.Printf("count: %d\n", count)
-			wg.Done()
+			cs <- 42
 		}()
-	}
-	fmt.Println("Goroutines:", runtime.NumGoroutine())
-	wg.Wait()
+		fmt.Println(<-cs)
 
-	fmt.Println("CPUs:", runtime.NumCPU())
-	fmt.Println("Goroutines:", runtime.NumGoroutine())
-	fmt.Println("Count: ", count)
-
-	// Go routines
-	// =========== Level9Ex3 ==============
-	// ====================================
-
-	//Level9Ex4()
-	//Level9Ex5()
-	//Level9Ex6()
-}
-
-func Level9Ex6() {
-}
-
-func Level9Ex5() {
-}
-
-func Level9Ex4() {
-}
-
-func Level9Ex3() {
+		fmt.Printf("------\n")
+		fmt.Printf("cs\t%T\n", cs)
+		// Level10Ex2
+		// ====================================
+	*/
 }
 
 type person92 struct {
