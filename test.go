@@ -62,6 +62,7 @@ import (
 	"runtime"
 	"sort"
 	"sync"
+	"sync/atomic"
 
 	"golang.org/x/crypto/bcrypt"
 )
@@ -230,7 +231,95 @@ func main() {
 	//Level10Ex1()
 	//Level10Ex2()
 	//Level10Ex3()
-	Level10Ex4()
+	//Level10Ex4()
+	//Level10Ex5()
+	//Level10Ex6()
+
+	Level10Ex7()
+}
+
+func Level10Ex7() {
+	c := make(chan int)
+	//q := make(chan int)
+
+	for j := 0; j < 10; j++ {
+		go func() {
+			for i := 0; i < 100; i++ {
+				c <- i
+			}
+		}()
+	}
+
+	for n := 0; n < 100; n++ {
+		fmt.Println(<-c)
+	}
+
+	fmt.Println("Finished...")
+}
+
+func Level10Ex7_TryToEnhanceAndStartEachLoopFromNextDecade() {
+	var countAtomic int64 = 0
+	c := make(chan int)
+	//q := make(chan int)
+
+	for j := 0; j < 10; j++ {
+		go func() {
+			for i := int(countAtomic); i < int(atomic.AddInt64(&countAtomic, 10)); i++ {
+				c <- i
+			}
+			atomic.AddInt64(&countAtomic, 10)
+		}()
+	}
+
+	array := make([]int, 100)
+	//array = array[100:100]
+	for n := 0; n < 100; n++ {
+		val := <-c
+		fmt.Println(n, val)
+
+		array[n] = val
+	}
+
+	fmt.Println("Sorted array")
+	sort.Ints(array)
+	for i := 0; i < 100; i++ {
+		fmt.Println(i, array[i])
+	}
+
+	fmt.Println("Finished...")
+}
+
+func Level10Ex6() {
+	c := make(chan int)
+
+	go func() {
+		for i := 0; i < 100; i++ {
+			c <- i
+		}
+		close(c)
+	}()
+
+	for v := range c {
+		fmt.Println(v)
+	}
+
+	fmt.Println("Finished...")
+}
+
+func Level10Ex5() {
+	c := make(chan int)
+
+	go func() {
+		c <- 42
+	}()
+
+	v, ok := <-c
+	fmt.Println(v, ok)
+
+	close(c)
+
+	v, ok = <-c
+	fmt.Println(v, ok)
 }
 
 func gen10Ex4(q chan<- int) <-chan int {
