@@ -83,6 +83,8 @@ type personExample struct {
 //var array [10]int
 
 func main() {
+	// first comment in test_01 branch
+
 	//fmt.Printf("%+v\n", a)
 	//fmt.Println(a)
 	//arrayActions()
