@@ -56,7 +56,9 @@ package main
 
 import (
 	"encoding/json"
+	"example/my/test/action"
 	"fmt"
+	"log"
 	"math"
 	"os"
 	"runtime"
@@ -239,7 +241,129 @@ func main() {
 	//Level10Ex5()
 	//Level10Ex6()
 
-	Level10Ex7()
+	// Level10Ex7()
+	// Level10Ex7TryToEnhanceAndStartEachLoopFromNextDecade()
+
+	// https://go.dev/blog/defer-panic-and-recover
+
+	// Level11Ex1()
+	// Level11Ex2()
+	// Level11Ex3()
+	// Level11Ex5()
+	// Level11Ex5()
+
+}
+
+func Level11Ex5() int {
+	// Just a link to testing resources:
+	// https://pkg.go.dev/testing
+	// https://www.golang-book.com/books/intro/12
+
+	a := 10
+	b := 15
+	res := action.AddInt(a, b)
+	fmt.Printf("%d + %d = %d", a, b, res)
+	return res
+}
+
+type sqrtError struct {
+	lat  string
+	long string
+	err  error
+}
+
+func (se sqrtError) Error() string {
+	return fmt.Sprintf("math error: %v %v %v", se.lat, se.long, se.err)
+}
+
+func sqrt(f float64) (float64, error) {
+	if f < 0 {
+		// return 0, fmt.Errorf("unable to handle negative number: %v", f) - my previous solution
+		// e := errors.New("unable to handle negative number")
+		e := fmt.Errorf("unable to handle negative number: %v", f)
+		return 0, sqrtError{"11.111 N", "45.444 W", e}
+	}
+	return 42, nil
+}
+
+func Level11Ex4() {
+	res, err := sqrt(-10.23)
+	if err != nil {
+		log.Println(err)
+		panic(err)
+		return
+	}
+
+	fmt.Println("SQRT = ", res)
+}
+
+type customErr struct {
+	errorMessage string
+}
+
+func (ce customErr) Error() string {
+	return fmt.Sprintf("custom error: %v", ce.errorMessage)
+}
+
+func Level11Ex3() {
+	c1 := customErr{"Generated error by code"}
+	fooLevel11Ex3(c1)
+}
+
+func fooLevel11Ex3(e error) {
+	fmt.Println("Foo func: ", e.(customErr).errorMessage) // assertion of type
+}
+
+type personLevel11Ex2 struct {
+	First   string
+	Last    string
+	Sayings []string
+}
+
+func Level11Ex2() {
+	p1 := personLevel11Ex2{
+		First:   "James",
+		Last:    "Bond",
+		Sayings: []string{"Shaken, not stirred", "Any last wishes?", "Never say never"},
+	}
+
+	bs, err := toJSON(p1)
+	if err != nil {
+		log.Println("failed toJSON method: %w", err)
+		return
+	}
+
+	fmt.Println(string(bs))
+}
+
+// toJSON needs to return an error also
+func toJSON(a interface{}) ([]byte, error) {
+	bs, err := json.Marshal(a)
+	if err != nil {
+		return nil, fmt.Errorf("failed Marshal: %w", err)
+	}
+	return bs, nil
+}
+
+type personLevel11Ex1 struct {
+	First   string
+	Last    string
+	Sayings []string
+}
+
+func Level11Ex1() {
+	p1 := personLevel11Ex1{
+		First:   "James",
+		Last:    "Bond",
+		Sayings: []string{"Shaken, not stirred", "Any last wishes?", "Never say never"},
+	}
+
+	bs, err := json.Marshal(p1)
+	if err != nil {
+		fmt.Errorf("marshal failed: %w", err)
+		log.Fatalln("marshal failed: %w", err)
+	}
+	fmt.Println(string(bs))
 }
 
 func Level10Ex7() {
@@ -261,7 +385,7 @@ func Level10Ex7() {
 	fmt.Println("Finished...")
 }
 
-func Level10Ex7_TryToEnhanceAndStartEachLoopFromNextDecade() {
+func Level10Ex7TryToEnhanceAndStartEachLoopFromNextDecade() {
 	var countAtomic int64 = 0
 	c := make(chan int)
 	//q := make(chan int)
