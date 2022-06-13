@@ -5,12 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f7b10750-1d06-4886-958f-4615a8dfb767" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/action/calc.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/action/calc_test.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/GoLangCourseExercises.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/GoLangCourseExercises.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/doc/documentation.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test.go" beforeDir="false" afterPath="$PROJECT_DIR$/test.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/action/calc.go" beforeDir="false" afterPath="$PROJECT_DIR$/action/calc.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/action/calc_test.go" beforeDir="false" afterPath="$PROJECT_DIR$/action/calc_test.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/go.mod" beforeDir="false" afterPath="$PROJECT_DIR$/go.mod" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/go.sum" beforeDir="false" afterPath="$PROJECT_DIR$/go.sum" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -59,7 +59,7 @@
     "go.import.settings.migrated": "true",
     "go.sdk.automatically.set": "true",
     "last_opened_file_path": "/Users/dagrest/Documents/My/Projects/Go/GoLangCourseExercises",
-    "settings.editor.selected.configurable": "preferences.fileTypes"
+    "settings.editor.selected.configurable": "go.sdk"
   }
 }]]></component>
   <component name="RecentsManager">

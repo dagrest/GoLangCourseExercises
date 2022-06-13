@@ -9,3 +9,9 @@ func TestCalc(t *testing.T) {
 		t.Errorf("10 + 20 = %d", expectedRes)
 	}
 }
+
+func BenchmarkCalc(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		AddInt(10, 20)
+	}
+}
